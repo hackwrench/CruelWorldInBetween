@@ -1,0 +1,5 @@
+HIQBCMMN.ZIP contains basic source files and assembly files for QB
+OBJ files for the assembly files are included for those who don't
+have an assembler for which these files work
+
+I can be reached at hackwrench@hotmail.com

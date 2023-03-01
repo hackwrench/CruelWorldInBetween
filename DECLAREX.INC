@@ -1,0 +1,2 @@
+DECLARE SUB XBit.Init ()
+

@@ -1,0 +1,28 @@
+About HI files:
+This is a collection of modules in which most of the routines are completely
+tested and debugged... mostly.
+Most text program routines differ from graphic routines by having a 0 in the
+title to make converting text programs easier.  The x and y values will have
+to be converted. See FUNCTIONs Mapx8 and Mapx16
+
+Any modules with duplicate routine names are not intended to be used
+together.
+
+Note:  For those of you that don't know, QuickBASIC uses *.MAK
+files to determine which files are to be loaded into the environment
+
+*.OBJ files are included for the assembler files for those who do not
+have an assembler.  Consult the QuickBASIC Manual on how to make LIB
+files and QLB files
+
+Load file ULINK.BAS for more Info
+
+If you have an earlier version of this collection you may want to keep
+a backup of it in case this one breaks whatever it is you wrote using
+the old version
+
+NOTE: Sometimes a routine may get moved into another file
+
+New, Incessant ramblings now included
+
+No Garantees No Promises including correct spelling

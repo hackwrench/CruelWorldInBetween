@@ -1,0 +1,8 @@
+Once, I created several binary files and made an error.
+All of the binary files were supposed to be the same size, but were all
+larger different sizes.  When I fixed the problem, the files
+retained their sizes. When I deleted the files and reran the
+creation subroutine, the problem was fixed.
+The moral of the story is that, even though BINARY open
+starts at the beginning of the file, it does not recreate the file anew.
+

@@ -1,0 +1,174 @@
+'FOR i = 1 TO 15: COLOR i: PRINT i; : NEXT i
+OPEN "CW.TXT" FOR INPUT AS #1
+LINE INPUT #1, a$
+LINE INPUT #1, a$
+DO
+  LINE INPUT #1, a$
+IF EOF(1) THEN EXIT DO
+  a = INSTR(a$, "-")
+  SELECT CASE MID$(a$, a + 1, LEN(a$))
+         CASE "DarkWarrior": COLOR 5
+         CASE "Jeanny":      COLOR 4
+         CASE "Arlyn":       COLOR 13
+         CASE ELSE
+  END SELECT
+LOCATE 25, 1
+PRINT MID$(a$, 1, a - 1);
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(MID$(a$, 1, a - 1)));
+LOOP
+END
+COLOR 5, 0
+  LOCATE 25, 1
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 4, 0
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 5, 0
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 4, 0
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 5, 0
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 13
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 5
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 13
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 4
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 5
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 4
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 13
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 4
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+
+COLOR 5
+  LOCATE 25, 1
+  LINE INPUT #1, a$
+  PRINT a$;
+  WHILE INKEY$ = ""
+  WEND
+  LOCATE 25, 1
+  PRINT SPACE$(LEN(a$));
+CLOSE
+
+
+

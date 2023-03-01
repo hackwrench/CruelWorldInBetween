@@ -1,0 +1,11 @@
+Object Oriented Programming
+
+Let's start with something simple, a text object.
+Let's see... a text object has color, a string, and a location.
+Or does it also have motion, a background, a border...  SIZE????
+maybe we should start with something smaller, a character no
+A pixel...
+Pixels have size, albeit fixed, though you can have different sized pixels
+within different resolutions.  Basically when it comes to pixels and size
+all that need to be known is the aspect ratio which is the same for all pixels
+at a given resolution

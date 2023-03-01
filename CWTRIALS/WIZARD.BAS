@@ -1,0 +1,982 @@
+DEFINT A-Z
+
+DECLARE SUB Info.W1 ()
+DECLARE FUNCTION CoOrdinates% (X%, Y%, Z%)
+   
+    DIM C$(34), I$(34), R$(4), W$(8), E$(8)
+    DIM L(512), C(3, 4), T(8), O(3), R(3)
+  
+    RANDOMIZE TIMER
+
+    DEF FNB (Q) = Q + 8 * ((Q = 9) - (Q = 0))
+    DEF FNC (Q) = -Q * (Q < 19) - 18 * (Q > 18)
+    DEF FNE (Q) = Q + 100 * (Q > 99)
+   
+    Y$ = "** PLEASE ANSWER YES OR NO"
+    NG = 0
+   
+    CLS
+    WIDTH 80
+    
+REM
+REM   INITIALIZE ARRAYS
+REM
+
+1240 NG = NG + 1
+     Q = RND(1)
+     RESTORE
+     FOR Q = 1 TO 34
+     READ C$(Q), I$(Q)
+     NEXT Q
+     FOR Q = 1 TO 512
+     L(Q) = 101
+     NEXT Q
+     FOR Q = 1 TO 8
+     READ W$(Q), E$(Q)
+     NEXT Q
+     FOR Q = 1 TO 4
+     READ R$(Q)
+     NEXT Q
+     IF NG > 1 GOTO 1520
+     CALL Info.W1
+1520
+    X = 1
+    Y = 4
+    L(CoOrdinates(X, Y, 1)) = 2
+    FOR Z = 1 TO 7
+        FOR Q1 = 1 TO 2
+            Q = 104
+            GOSUB 9590
+            L(CoOrdinates(X, Y, Z + 1)) = 103
+        NEXT Q1
+    NEXT Z
+    FOR Z = 1 TO 8
+    FOR Q = 113 TO 124
+        GOSUB 9590
+    NEXT Q
+    FOR Q1 = 1 TO 3
+        FOR Q = 105 TO 112
+            GOSUB 9590
+    NEXT Q
+    Q = 125
+    GOSUB 9590
+    NEXT Q1
+    NEXT Z
+    FOR Q = 126 TO 133
+        Z = Rand(8)
+        GOSUB 9590
+    NEXT Q
+    Q = 101
+    FOR A = 1 TO 3
+        Z = Rand(8)
+        GOSUB 9590
+        C(A, 1) = X
+        C(A, 2) = Y
+        C(A, 3) = Z
+        C(A, 4) = 0
+    NEXT A
+    RC = 0
+    ST = 2
+    DX = 14
+    R$(3) = "MAN"
+    Q = 112 + Rand(12)
+    Z = Rand(8)
+    GOSUB 9590
+    R(1) = X
+    R(2) = Y
+    R(3) = Z
+    Q = 109
+    Z = Rand(8)
+    GOSUB 9590
+    O(1) = X
+    O(2) = Y
+    O(3) = Z
+    BF = 0
+    OT = 8
+    AV = 0
+    HT = 0
+    T = 1
+    VF = 0
+    LF = 0
+    TC = 0
+    GP = 60
+    RF = 0
+    OF = 0
+    BL = 0
+    IQ = 8
+    SX = 0
+    FOR Q = 1 TO 8
+        T(Q) = 0
+    NEXT Q
+REM CHOOSE CHARACTER
+    PRINT CHR$(7);
+    PRINT "ALL RIGHT, BOLD ONE."
+2090 PRINT "YOU MAY BE AN ELF, DWARF, MAN, OR HOBBIT."
+     GOSUB 9830
+     FOR Q = 1 TO 4
+     IF LEFT$(R$(Q), 1) = O$ THEN RC = Q: ST = ST + 2 * Q: DX = DX - 2 * Q
+     NEXT Q
+     PRINT
+     OT = OT + 4 * (RC = 1)
+     IF RC > 0 THEN R$(3) = "HUMAN": GOTO 2190
+     PRINT "** THAT WAS INCORRECT. PLEASE TYPE E, D, M, OR H."
+     GOTO 2090
+2190 PRINT "WHICH SEX TO YOU PREFER";
+     GOSUB 9850
+     IF O$ = "M" THEN SX = 1: GOTO 2250
+     IF O$ = "F" GOTO 2250
+     PRINT "** CUTE "; R$(RC); ", REAL CUTE. TRY M OR F."
+     GOTO 2190
+2250 PRINT
+     PRINT "OK, "; R$(RC); ", YOU HAVE THE FOLLOWING ATTRIBUTES :"
+     PRINT "STRENGTH ="; ST; " INTELLIGENCE ="; IQ; " DEXTERITY ="; DX
+     PRINT "AND"; OT; "OTHER POINTS TO ALLOCATE AS YOU WISH."
+     PRINT
+     Z$ = "STRENGTH"
+     GOSUB 9880
+     ST = ST + Q
+     IF OT = 0 GOTO 2410
+     Z$ = "INTELLIGENCE"
+     GOSUB 9880
+     IQ = IQ + Q
+     IF OT = 0 GOTO 2410
+     Z$ = "DEXTERITY"
+     GOSUB 9880
+     DX = DX + Q
+2410 PRINT "OK, "; R$(RC); ", YOU HAVE 60 GOLD PIECES (GP'S)."
+2420 Z$ = "ARMOR"
+     GOSUB 10130
+     AV = 0: WV = 0: FL = 0: WC = 0
+     PRINT "PLATE<30> CHAINMAIL<20> LEATHER<10> NOTHING<0>"
+     GOSUB 9830
+     IF O$ = "N" GOTO 2530
+     AV = -3 * (O$ = "P") - 2 * (O$ = "C") - (O$ = "L")
+     IF AV > 0 GOTO 2530
+     PRINT
+     PRINT "** ARE YOU A "; R$(RC); " OR "; C$(Rand(12) + 12); "?"
+     GOTO 2420
+2530 AH = AV * 7: GP = GP - AV * 10
+     PRINT
+     PRINT "OK, BOLD "; R$(RC); ", YOU HAVE"; GP; "GP'S LEFT."
+2560 Z$ = "WEAPONS"
+     GOSUB 10130
+     PRINT "SWORD<30> MACE<20> DAGGER<10> NOTHING<0>"
+     GOSUB 9830
+     IF O$ = "N" GOTO 2660
+     WV = -3 * (O$ = "S") - 2 * (O$ = "M") - (O$ = "D")
+     IF WV > 0 GOTO 2660
+     PRINT
+     PRINT "** IS YOUR IQ REALLY"; IQ; "?"
+     GOTO 2560
+2660 GP = GP - WV * 10
+     IF GP < 20 GOTO 2730
+     PRINT
+2690 PRINT "DO YOU WANT TO BUY A LAMP FOR 20 GP'S";
+     GOSUB 9850
+     IF O$ = "Y" THEN LF = 1: GP = GP - 20: GOTO 2730
+     IF O$ <> "N" THEN PRINT : PRINT Y$: PRINT : GOTO 2690
+2730 PRINT
+     IF GP < 1 THEN Q = 0: GOTO 2850
+     PRINT "OK, "; R$(RC); ", YOU HAVE"; GP; "GOLD PIECES LEFT."
+     PRINT
+2770 INPUT "FLARES COST 1 GP EACH. HOW MANY DO YOU WANT"; O$
+     Q = VAL(O$)
+     PRINT
+     IF Q > 0 OR ASC(O$) = 48 GOTO 2840
+     PRINT "** IF YOU DON'T WANT ANY, JUST TYPE 0 (ZERO)."
+     PRINT
+     GOTO 2770
+2840 IF Q > GP THEN PRINT "** YOU CAN ONLY AFFORD"; GP; ".": PRINT : GOTO 2770
+2850 FL = FL + Q: GP = GP - Q
+     X = 1: Y = 4: Z = 1
+     PRINT "OK, "; R$(RC); ", YOU ARE NOW ENTERING THE CASTLE!"
+     GOTO 5920
+     REM
+     REM   MAIN PROCESSING LOOP
+     REM
+2920 T = T + 1
+     IF RF + OF > 0 GOTO 3060
+     IF C(1, 4) > T(1) THEN T = T + 1
+     IF C(2, 4) > T(3) THEN GP = GP - Rand(5)
+     IF GP < 0 THEN GP = 0
+     IF C(3, 4) <= T(5) GOTO 3060
+     A = X: B = Y: C = Z
+     X = Rand(8): Y = Rand(8): Z = Rand(8)
+     L(CoOrdinates(X, Y, Z)) = FNE(L(CoOrdinates(X, Y, Z))) + 100
+     X = A: Y = B: Z = C
+     IF L(CoOrdinates(X, Y, Z)) <> 1 GOTO 3060
+     FOR Q = 1 TO 3
+     C(Q, 4) = -(C(Q, 1) = X) * (C(Q, 2) = Y) * (C(Q, 3) = Z)
+     NEXT Q
+3060 IF Rand(5) > 1 GOTO 3350
+     PRINT
+     PRINT "YOU ";
+     Q = Rand(7) + BL
+     IF Q > 7 THEN Q = 4
+     ON Q GOSUB 3270, 3150, 3250, 3130, 3290, 3310, 3330
+GOTO 3350
+
+3130
+    PRINT "STEPPED ON A FROG!"
+RETURN
+3150
+    PRINT "HEAR ";
+     ON Rand(4) GOTO 3170, 3190, 3210, 3230
+3170
+    PRINT "A SCREAM!"
+RETURN
+
+3190
+    PRINT "FOOTSTEPS!"
+RETURN
+
+3210
+    PRINT "A WUMPUS!"
+RETURN
+
+3230
+    PRINT "THUNDER!"
+RETURN
+
+3250
+    PRINT "SNEEZED!"
+RETURN
+
+3270
+    PRINT "SEE A BAT FLY BY!"
+RETURN
+
+3290
+    PRINT "SMELL "; C$(12 + Rand(13)); " FRYING!"
+RETURN
+
+3310
+    PRINT "FEEL LIKE YOU'RE BEING WATCHED!"
+RETURN
+
+3330
+    PRINT "HEAR FAINT RUSTLING NOISES!"
+RETURN
+
+3350
+REM CURE BLINDNESS
+    IF BL + T(4) = 2 THEN
+       PRINT
+       PRINT C$(29); " CURES YOUR BLINDNESS!"
+       BL = 0
+    END IF
+
+REM REMOVE STUCK BOOK
+    IF BF + T(6) = 2 THEN
+       PRINT
+       PRINT C$(31); " DISSOLVES THE BOOK!"
+       BF = 0
+    END IF
+
+
+3430 REM GET COMMAND
+    PRINT
+    LINE INPUT "ENTER YOUR COMMAND: "; O$
+    IF LEFT$(O$, 2) = "DR" THEN GOTO 4760
+    O$ = LEFT$(O$, 1)
+    IF O$ = "N" THEN GOTO 3890
+    IF (O$ = "S") OR (O$ = "W") OR (O$ = "E") THEN GOTO 3900
+    IF O$ = "U" THEN GOTO 3950
+    IF O$ = "D" THEN GOTO 3980
+    IF O$ = "M" THEN GOTO 4030
+    IF O$ = "F" THEN ON BL + 1 GOTO 4260, 4030
+    IF O$ = "L" THEN ON BL + 1 GOTO 4520, 4030
+    IF O$ = "O" THEN GOTO 4950
+    IF O$ = "G" THEN ON BL + 1 GOTO 5390, 4030
+    IF O$ = "T" THEN PRINT : ON RF + 1 GOTO 5650, 5690
+    IF O$ = "Q" THEN GOTO 5800
+    IF O$ = "H" THEN GOTO 3860
+GOTO 2920
+
+3860  
+    PRINT CHR$(27); "E"
+    PRINT "*** WIZARD'S CASTLE COMMAND AND INFORMATION SUMMARY ***"
+    PRINT
+    PRINT "THE FOLLOWING COMMANDS ARE AVAILABLE :"
+    PRINT
+    PRINT "H/ELP     N/ORTH    S/OUTH    E/AST     W/EST     U/P"
+    PRINT "D/OWN     DR/INK    M/AP      F/LARE    L/AMP     O/PEN"
+    PRINT "G/AZE     T/ELEPORT Q/UIT"
+    PRINT
+    PRINT "THE CONTENTS OF ROOMS ARE AS FOLLOWS :"
+    PRINT
+    PRINT ". = EMPTY ROOM      B = BOOK            C = CHEST"
+    PRINT "D = STAIRS DOWN     E = ENTRANCE/EXIT   F = FLARES"
+    PRINT "G = GOLD PIECES     M = MONSTER         O = CRYSTAL ORB"
+    PRINT "P = MAGIC POOL      S = SINKHOLE        T = TREASURE"
+    PRINT "U = STAIRS UP       V = VENDOR          W = WARP/ORB"
+    PRINT
+    PRINT "THE BENEFITS OF HAVING TREASURES ARE :"
+    PRINT
+    PRINT "RUBY RED - AVOID LETHARGY     PALE PEARL - AVOID LEECH"
+    PRINT "GREEN GEM - AVOID FORGETTING  OPAL EYE - CURES BLINDNESS"
+    PRINT "BLUE FLAME - DISSOLVES BOOKS  NORN STONE - NO BENEFIT"
+    PRINT "PALANTIR - NO BENEFIT         SILMARIL - NO BENEFIT"
+    PRINT
+    PRINT "PRESS RETURN WHEN READY TO RESUME, "; R$(RC); ".";
+    LINE INPUT ""; O$
+GOTO 2920
+
+3890 IF L(CoOrdinates(X, Y, Z)) = 2 GOTO 8960
+
+3900 X = X + (O$ = "N") - (O$ = "S")
+     Y = Y + (O$ = "W") - (O$ = "E")
+     X = FNB(X)
+     Y = FNB(Y)
+GOTO 5920
+
+3950 IF L(CoOrdinates(X, Y, Z)) = 3 THEN Z = Z - 1: GOTO 5920
+     Z$ = "UP"
+GOTO 4000
+
+3980 Z$ = "DOWN"
+     IF L(CoOrdinates(X, Y, Z)) = 4 THEN Z = Z + 1: GOTO 5920
+4000 PRINT
+     PRINT "** THERE ARE NO STAIRS GOING "; Z$; " FROM HERE!"
+GOTO 2920
+
+4030 IF BL <> 1 GOTO 4100
+     PRINT
+     PRINT "** YOU CAN'T SEE ANYTHING, YOU DUMB "; R$(RC); "!"
+GOTO 2920
+
+REM
+REM   DISPLAY MAP OF CURRENT CASTLE LEVEL
+REM
+4100 PRINT
+     A = X: B = Y
+     FOR X = 1 TO 8
+     FOR Y = 1 TO 8
+     Q = L(CoOrdinates(X, Y, Z))
+     IF Q > 99 THEN Q = Q - 100' LET Q=34 TO HIDE ROOMS
+     IF X = A AND Y = B THEN PRINT "<"; I$(Q); ">  "; : GOTO 4180
+     PRINT " "; I$(Q); "   ";
+4180 NEXT Y
+     PRINT
+     PRINT
+     NEXT X
+     X = A: Y = B
+     GOTO 4470
+     PRINT ") LEVEL"; Z
+     GOTO 2920
+4260 IF FL <> 0 GOTO 4320
+     PRINT "** HEY, BRIGHT ONE, YOU'RE OUT OF FLARES!"
+     GOTO 2920
+     REM
+     REM   DISeADJACENT ROOM CONTENTS WITH FLARE
+     REM
+4320 PRINT
+     FL = FL - 1
+     A = X: B = Y
+     FOR Q1 = A - 1 TO A + 1
+     X = FNB(Q1)
+     FOR Q2 = B - 1 TO B + 1
+     Y = FNB(Q2)
+     Q = FNE(L(CoOrdinates(X, Y, Z)))
+     L(CoOrdinates(X, Y, Z)) = Q
+     PRINT " "; I$(Q); "   ";
+     NEXT Q2
+     PRINT
+     PRINT
+     NEXT Q1
+     X = A: Y = B
+4470 GOSUB 10160
+     GOTO 2920
+     REM
+     REM   DISPLAY CONTENTS OF ADJACENT ROOM WITH LAMP
+     REM
+4520 IF LF <> 0 GOTO 4560
+     PRINT
+     PRINT "** YOU DON'T HAVE A LAMP, "; R$(RC); "!"
+     GOTO 2920
+4560 PRINT
+     PRINT "WHERE DO YOU WANT TO SHINE THE LAMP (N,S,E,W)";
+     GOSUB 9850
+     A = X: B = Y
+     X = FNB(X + (O$ = "N") - (O$ = "S"))
+     Y = FNB(Y + (O$ = "W") - (O$ = "E"))
+     IF A - X + B - Y <> 0 GOTO 4660
+     PRINT
+     PRINT "** THAT'S NOT A DIRECTION, "; R$(RC); "!"
+     GOTO 2920
+4660 PRINT
+     PRINT "THE LAMP SHINES INTO ("; X; ","; Y; ") LEVEL"; Z; "."
+     PRINT
+     L(CoOrdinates(X, Y, Z)) = FNE(L(CoOrdinates(X, Y, Z)))
+     PRINT "THERE YOU WILL FIND "; C$(L(CoOrdinates(X, Y, Z))); "."
+     X = A: Y = B
+     GOTO 2920
+     REM
+     REM   TAKE A DRINK FROM A POOL
+     REM
+4760 IF L(CoOrdinates(X, Y, Z)) = 5 GOTO 4800
+     PRINT
+     PRINT "** IF YOU WANT A DRINK, FIND A POOL!"
+     GOTO 2920
+4800 Q = Rand(8)
+     PRINT
+     PRINT "YOU TAKE A DRINK AND ";
+     IF Q < 7 THEN PRINT "FEEL ";
+     ON Q GOTO 4850, 4860, 4870, 4880, 4890, 4900, 4910, 4930
+4850 ST = FNC(ST + Rand(3)): PRINT "STRONGER.": GOTO 2920
+4860 ST = ST - Rand(3): PRINT "WEAKER.": ON (1 - (ST < 1)) GOTO 2920, 8840
+4870 IQ = FNC(IQ + Rand(3)): PRINT "SMARTER.": GOTO 2920
+4880 IQ = IQ - Rand(3): PRINT "DUMBER.": ON (1 - (IQ < 1)) GOTO 2920, 8840
+4890 DX = FNC(DX + Rand(3)): PRINT "NIMBLER.": GOTO 2920
+4900 DX = DX - Rand(3): PRINT "CLUMSIER.": ON (1 - (DX < 1)) GOTO 2920, 8840
+4910 Q = Rand(4): IF Q = RC GOTO 4910
+     RC = Q: PRINT "BECOME A "; R$(RC); ".": GOTO 2920
+4930 SX = 1 - SX: PRINT "TURN INTO A "; : IF SX = 0 THEN PRINT "FE";
+     PRINT "MALE "; R$(RC); "!": GOTO 2920
+4950 IF L(CoOrdinates(X, Y, Z)) <> 6 GOTO 4990
+     PRINT
+     PRINT "YOU OPEN THE CHEST AND"
+     GOTO 5250
+4990 IF L(CoOrdinates(X, Y, Z)) <> 12 GOTO 5030
+     PRINT
+     PRINT "YOU OPEN THE BOOK AND"
+     GOTO 5060
+5030 PRINT
+     PRINT "** THE ONLY THING OPENED WAS YOUR BIG MOUTH!"
+     GOTO 2920
+5060 ON Rand(6) GOTO 5070, 5100, 5120, 5140, 5170, 5200
+5070 PRINT "FLASH! OH NO! YOU ARE NOW A BLIND "; R$(RC); "!"
+     BL = 1
+     GOTO 5230
+5100 PRINT "IT'S ANOTHER VOLUME OF ZOT'S POETRY! - YECH!!"
+     GOTO 5230
+5120 PRINT "IT'S AN OLD COPY OF PLAY"; R$(Rand(4)); "!"
+     GOTO 5230
+5140 PRINT "IT'S A MANUAL OF DEXTERITY!"
+     DX = 18
+     GOTO 5230
+5170 PRINT "IT'S A MANUAL OF STRENGTH!"
+     ST = 18
+     GOTO 5230
+5200 PRINT "THE BOOK STICKS TO YOUR HANDS -"
+     PRINT "NOW YOU ARE UNABLE TO DRAW YOUR WEAPON!"
+     BF = 1
+5230 L(CoOrdinates(X, Y, Z)) = 1
+     GOTO 2920
+5250 ON Rand(4) GOTO 5260, 5300, 5340, 5300
+5260 PRINT "KABOOM! IT EXPLODES!!"
+     Q = Rand(6)
+     GOSUB 8740
+     ON (1 - (ST < 1)) GOTO 5230, 8840
+5300 Q = Rand(1000)
+     PRINT "FIND"; Q; "GOLD PIECES!"
+     GP = GP + Q
+     GOTO 5230
+5340 PRINT "GAS!! YOU STAGGER FROM THE ROOM!"
+     L(CoOrdinates(X, Y, Z)) = 1
+     T = T + 20
+     O$ = MID$("NSEW", Rand(4), 1)
+     GOTO 3900
+5390 IF L(CoOrdinates(X, Y, Z)) = 11 GOTO 5430
+     PRINT
+     PRINT "** IT'S HARD TO GAZE WITHOUT AN ORB!"
+     GOTO 2920
+5430 PRINT
+     PRINT "YOU SEE ";
+     ON Rand(6) GOTO 5460, 5480, 5500, 5520, 5590, 5630
+5460 PRINT "YOURSELF IN A BLOODY HEAP!"
+     ST = ST - Rand(2): ON (1 - (ST < 1)) GOTO 2920, 8840
+5480 PRINT "YOURSELF DRINKING FROM A POOL AND BECOMING "; C$(12 + Rand(13)); "!"
+     GOTO 2920
+5500 PRINT C$(12 + Rand(13)); " GAZING BACK AT YOU!"
+     GOTO 2920
+5520 A = X: B = Y: C = Z
+     X = Rand(8): Y = Rand(8): Z = Rand(8)
+     Q = FNE(L(CoOrdinates(X, Y, Z)))
+     L(CoOrdinates(X, Y, Z)) = Q
+     PRINT C$(Q); " AT ("; X; ","; Y; ") LEVEL"; Z; "."
+     X = A: Y = B: Z = C
+     GOTO 2920
+5590 A = Rand(8): B = Rand(8): C = Rand(8)
+     IF Rand(8) < 4 THEN A = O(1): B = O(2): C = O(3)
+     PRINT "***THE ORB OF ZOT*** AT ("; A; ","; B; ") LEVEL"; C; "!"
+     GOTO 2920
+5630 PRINT "A SOAP OPERA RERUN!"
+     GOTO 2920
+5650 IF RF <> 0 GOTO 5690
+     PRINT
+     PRINT "** YOU CAN'T TELEPORT WITHOUT THE RUNESTAFF!"
+     GOTO 2920
+5690 Z$ = "X-COORDINATE"
+     GOSUB 9990
+     X = Q
+     Z$ = "Y-COORDINATE"
+     GOSUB 9990
+     Y = Q
+     Z$ = "Z-COORDINATE"
+     GOSUB 9990
+     Z = Q
+     O$ = "T"
+     GOTO 5920
+5800 PRINT
+     PRINT "DO YOU REALLY WANT TO QUIT NOW";
+     GOSUB 9850
+     PRINT
+     IF O$ = "Y" GOTO 5870
+     PRINT "** THEN DON'T SAY THAT YOU DO!"
+     GOTO 2920
+5870 PRINT
+     GOTO 9080
+     REM
+     REM   DISPLAY STATUS INFORMATION
+     REM
+5920 PRINT
+     IF BL = 0 THEN GOSUB 10160: PRINT
+     PRINT "STRENGTH ="; ST; " INTELLIGENCE ="; IQ; " DEXTERITY ="; DX
+     PRINT "TREASURES ="; TC; " FLARES ="; FL; " GOLD PIECES ="; GP
+     PRINT "WEAPON = "; W$(WV + 1); "  ARMOR = "; W$(AV + 5);
+     IF LF = 1 THEN PRINT "  AND A LAMP";
+     PRINT
+     WC = 0
+     Q = FNE(L(CoOrdinates(X, Y, Z)))
+     L(CoOrdinates(X, Y, Z)) = Q
+     Z$ = "YOU NOW HAVE"
+     PRINT
+     PRINT "HERE YOU FIND "; C$(Q); "."
+     IF (Q < 7) OR (Q = 11) OR (Q = 12) GOTO 2920
+     IF Q = 7 THEN GP = GP + Rand(10): PRINT Z$; GP; ".": GOTO 5230
+     IF Q = 8 THEN FL = FL + Rand(5): PRINT Z$; FL; ".": GOTO 5230
+     IF Q > 9 GOTO 6110
+     IF (O(1) = X) AND (O(2) = Y) AND (O(3) = Z) THEN ON (1 - (O$ = "T")) GOTO 3900, 9370
+     X = Rand(8): Y = Rand(8): Z = Rand(8): GOTO 5920
+6110 IF Q = 10 THEN Z = FNB(Z + 1): GOTO 5920
+     IF Q <= 25 OR Q >= 34 GOTO 6180
+     PRINT
+     PRINT "IT'S NOW YOURS!"
+     T(Q - 25) = 1
+     TC = TC + 1
+     GOTO 5230
+6180 A = L(CoOrdinates(X, Y, Z)) - 12
+     WC = 0
+     IF (A < 13) OR (VF = 1) GOTO 7390
+6210 PRINT
+     PRINT "YOU MAY TRADE WITH, ATTACK, OR IGNORE THE VENDOR."
+     GOSUB 9830
+     IF O$ = "I" GOTO 2920
+     IF O$ <> "A" GOTO 6300
+     VF = 1
+     PRINT
+     PRINT "YOU'LL BE SORRY THAT YOU DID THAT!"
+     GOTO 7390
+6300 IF O$ = "T" GOTO 6340
+     PRINT
+     PRINT "** NICE SHOT, "; R$(RC); "!"
+     GOTO 6210
+6340 FOR Q = 1 TO 8
+     A = Rand(Q * 1500)
+     IF T(Q) = 0 GOTO 6420
+6370 PRINT
+     PRINT "DO YOU WANT TO SELL "; C$(Q + 25); " FOR"; A; "GP'S";
+     GOSUB 9850
+     IF O$ = "Y" THEN TC = TC - 1: T(Q) = 0: GP = GP + A: GOTO 6420
+     IF O$ <> "N" THEN PRINT Y$: GOTO 6370
+6420 NEXT Q
+     IF GP >= 1000 GOTO 6470
+     PRINT
+     PRINT "YOU'RE TOO POOR TO TRADE, "; R$(RC); "."
+     GOTO 2920
+6470 IF GP < 1250 GOTO 6970
+     PRINT
+     PRINT "OK, "; R$(RC); ", YOU HAVE"; GP; "GP'S AND "; W$(AV + 5); " ARMOR."
+6500 PRINT
+     Z$ = "ARMOR"
+     GOSUB 10130
+     PRINT "NOTHING<0> LEATHER<1250> ";
+     IF GP > 1499 THEN PRINT "CHAINMAIL<1500> ";
+     IF GP > 1999 THEN PRINT "PLATE<2000>";
+6560 PRINT
+     GOSUB 9830
+     PRINT
+     IF O$ = "N" GOTO 6720
+     IF O$ = "L" THEN GP = GP - 1250: AV = 1: AH = 7: GOTO 6720
+     IF O$ <> "C" OR GP >= 1500 GOTO 6640
+     PRINT "** YOU HAVEN'T GOT THAT MUCH CASH ON HAND!"
+     GOTO 6500
+6640 IF O$ = "C" THEN GP = GP - 1500: AV = 2: AH = 14: GOTO 6720
+     IF O$ <> "P" OR GP >= 2000 GOTO 6680
+     PRINT "** YOU CAN'T AFFORD PLATE ARMOR!"
+     GOTO 6500
+6680 IF O$ = "P" THEN GP = GP - 2000: AV = 3: AH = 21: GOTO 6720
+     PRINT
+     PRINT "** DON'T BE SILLY. CHOOSE A SELECTION."
+     GOTO 6560
+6720 IF GP < 1250 GOTO 6970
+     PRINT
+     PRINT "YOU HAVE"; GP; "GP'S LEFT WITH "; W$(WV + 1); " IN HAND."
+6750 PRINT
+     Z$ = "WEAPON"
+     GOSUB 10130
+     PRINT "NOTHING<0> DAGGER<1250> ";
+     IF GP > 1499 THEN PRINT "MACE<1500> ";
+     IF GP > 1999 THEN PRINT "SWORD<2000>";
+6810 PRINT
+     GOSUB 9830
+     PRINT
+     IF O$ = "N" GOTO 6970
+     IF O$ = "D" THEN GP = GP - 1250: WV = 1: GOTO 6970
+     IF O$ <> "M" OR GP >= 1500 GOTO 6890
+     PRINT "** SORRY SIR, I'M AFRAID I DON'T GIVE CREDIT!"
+     GOTO 6750
+6890 IF O$ = "M" THEN GP = GP - 1500: WV = 2: GOTO 6970
+     IF O$ <> "S" OR GP >= 2000 GOTO 6940
+     PRINT "** YOUR DUNGEON EXPRESS CARD - ";
+     PRINT "YOU LEFT HOME WITHOUT IT!"
+     GOTO 6750
+6940 IF O$ = "S" THEN GP = GP - 2000: WV = 3: GOTO 6970
+     PRINT "** TRY CHOOSING A SELECTION!"
+     GOTO 6810
+6970 IF GP < 1000 GOTO 2920
+6980 Z$ = "STRENGTH"
+     GOSUB 10070
+     IF O$ <> "Y" GOTO 7060
+     GP = GP - 1000
+     ST = FNC(ST + Rand(6))
+     Q = ST
+     GOSUB 10100
+     GOTO 6970
+7060 IF O$ <> "N" THEN PRINT Y$: GOTO 6980
+7070 IF GP < 1000 GOTO 2920
+7080 Z$ = "INTELLIGENCE"
+     GOSUB 10070
+     IF O$ <> "Y" GOTO 7160
+     GP = GP - 1000
+     IQ = FNC(IQ + Rand(6))
+     Q = IQ
+     GOSUB 10100
+     GOTO 7070
+7160 IF O$ <> "N" THEN PRINT Y$: GOTO 7080
+7170 IF GP < 1000 GOTO 2920
+7180 Z$ = "DEXTERITY"
+     GOSUB 10070
+     IF O$ <> "Y" GOTO 7260
+     GP = GP - 1000
+     DX = FNC(DX + Rand(6))
+     Q = DX
+     GOSUB 10100
+     GOTO 7170
+7260 IF O$ <> "N" THEN PRINT Y$: GOTO 7180
+     IF (GP < 1000) OR (LF = 1) GOTO 2920
+7280 PRINT
+     PRINT "DO YOU WANT TO BUY A LAMP FOR 1000 GP'S";
+     GOSUB 9850
+     IF O$ <> "Y" GOTO 7370
+     GP = GP - 1000
+     LF = 1
+     PRINT
+     PRINT "IT'S GUARANTEED TO OUTLIVE YOU!"
+     GOTO 2920
+7370 IF O$ <> "N" THEN PRINT Y$: GOTO 7280
+     GOTO 2920
+7390 Q1 = 1 + INT(A / 2): Q2 = A + 2: Q3 = 1
+     IF (C(1, 4) > T(1)) OR (BL = 1) OR (DX < Rand(9) + Rand(9)) GOTO 8420
+7410 PRINT
+     PRINT "YOU'RE FACING "; C$(A + 12); "!"
+     PRINT
+     PRINT "YOU MAY ATTACK OR RETREAT."
+     IF Q3 = 1 THEN PRINT "YOU CAN ALSO ATTEMPT A BRIBE."
+     IF IQ > 14 THEN PRINT "YOU CAN ALSO CAST A SPELL."
+     PRINT
+     PRINT "YOUR STRENGTH IS"; ST; "AND YOUR DEXTERITY IS"; DX; "."
+     GOSUB 9830
+     IF O$ <> "A" GOTO 7910
+     IF WV <> 0 GOTO 7550
+     PRINT
+     PRINT "** POUNDING ON "; C$(A + 12); " WON'T HURT IT!"
+     GOTO 8420
+7550 IF BF <> 1 GOTO 7590
+     PRINT
+     PRINT "** YOU CAN'T BEAT IT TO DEATH WITH A BOOK!"
+     GOTO 8420
+7590 IF DX >= Rand(20) + (3 * BL) GOTO 7630
+     PRINT
+     PRINT "YOU MISSED, TOO BAD!"
+     GOTO 8420
+7630 Z$ = RIGHT$(C$(A + 12), LEN(C$(A + 12)) - 2)
+     IF LEFT$(Z$, 1) = " " THEN Z$ = MID$(Z$, 2)
+     PRINT
+     PRINT "YOU HIT THE EVIL "; Z$; "!"
+     Q2 = Q2 - WV
+     IF (A <> 9 AND A <> 12) GOTO 7730
+     IF Rand(8) <> 1 GOTO 7730
+     PRINT
+     PRINT "OH NO! YOUR "; W$(WV + 1); " BROKE!"
+     WV = 0
+7730 IF Q2 > 0 GOTO 8420
+7740 PRINT
+     MC = MC - 1
+     PRINT C$(A + 12); " LIES DEAD AT YOUR FEET!"
+     IF H > T - 60 GOTO 7810
+     PRINT
+     PRINT "YOU SPEND AN HOUR EATING "; C$(A + 12); E$(Rand(8)); "."
+     H = T
+7810 IF X <> R(1) OR Y <> R(2) OR Z <> R(3) THEN ON (1 - (A = 13)) GOTO 7860, 9630
+     PRINT
+     PRINT "GREAT ZOT! YOU'VE FOUND THE RUNESTAFF!"; CHR$(7)
+     R(1) = 0
+     RF = 1
+7860 Q = Rand(1000)
+     PRINT
+     PRINT "YOU NOW GET HIS HOARD OF"; Q; "GP'S"
+     GP = GP + Q
+     GOTO 5230
+7910 IF O$ = "R" GOTO 8420
+     IF O$ <> "C" GOTO 8210
+     IF IQ >= 15 OR Q3 <= 1 GOTO 7970
+     PRINT
+     PRINT "** YOU CAN'T CAST A SPELL NOW!"
+     GOTO 7410
+7970 PRINT
+     PRINT "WHICH SPELL (WEB, FIREBALL, DEATHSPELL)";
+     GOSUB 9850
+     PRINT
+     IF O$ <> "W" GOTO 8050
+     ST = ST - 1
+     WC = Rand(8) + 1
+     ON (1 - (ST < 1)) GOTO 8420, 8840
+8050 IF O$ <> "F" GOTO 8140
+     Q = Rand(7) + Rand(7)
+     ST = ST - 1
+     IQ = IQ - 1
+     IF (IQ < 1) OR (ST < 1) GOTO 8840
+     PRINT "IT DOES"; Q; "POINTS WORTH OF DAMAGE."
+     PRINT
+     Q2 = Q2 - Q
+     GOTO 7730
+8140 IF O$ = "D" GOTO 8180
+     PRINT
+     PRINT "** TRY ONE OF THE OPTIONS GIVEN."
+     GOTO 7410
+8180 PRINT "DEATH . . . ";
+     IF IQ < Rand(4) + 15 THEN PRINT "YOURS!": IQ = 0: GOTO 8840
+     PRINT "HIS!": Q2 = 0: GOTO 7740
+8210 IF O$ = "B" AND Q3 <= 1 GOTO 8250
+     PRINT
+     PRINT "** CHOOSE ONE OF THE OPTIONS LISTED."
+     GOTO 7410
+8250 IF TC <> 0 GOTO 8290
+     PRINT
+     PRINT "ALL I WANT IS YOUR LIFE!"
+     GOTO 8420
+8290 Q = Rand(8)
+     IF T(Q) = 0 GOTO 8290
+8310 PRINT
+     PRINT "I WANT "; C$(Q + 25); ". WILL YOU GIVE IT TO ME";
+     GOSUB 9850
+     IF O$ = "N" GOTO 8420
+     IF O$ <> "Y" THEN PRINT Y$: GOTO 8310
+     T(Q) = 0
+     TC = TC - 1
+     PRINT
+     PRINT "OK, JUST DON'T TELL ANYONE ELSE."
+     VF = VF + (L(CoOrdinates(X, Y, Z)) = 25)
+     GOTO 2920
+8420 Q3 = 2
+     IF WC <= 0 GOTO 8460
+     WC = WC - 1
+     IF WC = 0 THEN PRINT : PRINT "THE WEB JUST BROKE!"
+8460 Z$ = RIGHT$(C$(A + 12), LEN(C$(A + 12)) - 2)
+     IF LEFT$(Z$, 1) = " " THEN Z$ = MID$(Z$, 2)
+     IF WC <= 0 GOTO 8520
+     PRINT
+     PRINT "THE "; Z$; " IS STUCK AND CAN'T ATTACK NOW!"
+     GOTO 8630
+8520 PRINT
+     PRINT "THE "; Z$; " ATTACKS!"
+     IF DX < Rand(7) + Rand(7) + Rand(7) + 3 * BL GOTO 8580
+     PRINT
+     PRINT "WHAT LUCK, HE MISSED YOU!"
+     GOTO 8630
+8580 PRINT
+     PRINT "OUCH! HE HIT YOU!"
+     Q = Q1
+     GOSUB 8740
+     IF ST < 1 GOTO 8840
+8630 IF O$ <> "R" GOTO 7410
+     PRINT
+     PRINT "YOU HAVE ESCAPED!"
+     PRINT
+8670 PRINT "DO YOU WANT TO GO NORTH, SOUTH, EAST, OR WEST";
+     GOSUB 9850
+     IF O$ = "N" OR O$ = "S" OR O$ = "E" OR O$ = "W" GOTO 3900
+     PRINT
+     PRINT "** DON'T PRESS YOUR LUCK, "; R$(RC); "!"
+     PRINT
+     GOTO 8670
+8740 IF AV = 0 GOTO 8820
+     Q = Q - AV
+     AH = AH - AV
+     IF Q < 0 THEN AH = AH - Q: Q = 0
+     IF AH >= 0 GOTO 8820
+     AH = 0: AV = 0
+     PRINT
+     PRINT "YOUR ARMOR HAS BEEN DESTROYED . . . GOOD LUCK!"
+8820 ST = ST - Q
+     RETURN
+8840 PRINT CHR$(7)
+     GOSUB 9770
+     PRINT "A NOBLE EFFORT, OH FORMERLY LIVING "; R$(RC); "!"
+     PRINT
+     PRINT "YOU DIED DUE TO LACK OF ";
+     IF ST < 1 THEN PRINT "STRENGTH."
+     IF IQ < 1 THEN PRINT "INTELLIGENCE."
+     IF DX < 1 THEN PRINT "DEXTERITY."
+     PRINT
+     Q3 = 1
+     PRINT "AT THE TIME YOU DIED, YOU HAD :"
+     GOTO 9130
+8960 Q3 = 0
+     PRINT
+     PRINT "YOU LEFT THE CASTLE WITH";
+     IF OF = 0 THEN PRINT "OUT";
+     PRINT " THE ORB OF ZOT."
+     PRINT
+     IF OF = 0 GOTO 9080
+     PRINT
+     PRINT "AN INCREDIBLY GLORIOUS VICTORY!!"
+     PRINT
+     PRINT "IN ADDITION, YOU GOT OUT WITH THE FOLLOWING :"
+     GOTO 9120
+9080 PRINT
+     PRINT "A LESS THAN AWE-INSPIRING DEFEAT."
+     PRINT
+     PRINT "WHEN YOU LEFT THE CASTLE, YOU HAD :"
+9120 IF Q3 = 0 THEN PRINT "YOUR MISERABLE LIFE!"
+9130 FOR Q = 1 TO 8
+     IF T(Q) = 1 THEN PRINT C$(Q + 25)
+     NEXT Q
+     PRINT W$(WV + 1); " AND "; W$(AV + 5);
+     IF LF = 1 THEN PRINT " AND A LAMP";
+     PRINT
+     PRINT "YOU ALSO HAD"; FL; "FLARES AND"; GP; "GOLD PIECES"
+     IF RF = 1 THEN PRINT "AND THE RUNESTAFF"
+     PRINT
+     PRINT "AND IT TOOK YOU"; T; "TURNS!"
+     PRINT
+9240 PRINT "ARE YOU FOOLISH ENOUGH TO WANT TO PLAY AGAIN";
+     GOSUB 9850
+     PRINT
+     IF O$ <> "Y" THEN GOTO 9330
+     PRINT "SOME "; R$(RC); "S NEVER LEARN!"
+     PRINT
+     PRINT "PLEASE BE PATIENT WHILE THE CASTLE IS RESTOCKED."
+     PRINT
+     GOTO 1240
+9330 IF O$ <> "N" THEN PRINT Y$: GOTO 9240
+     PRINT "MAYBE DUMB "; R$(RC); " IS NOT SO DUMB AFTER ALL!"
+     PRINT
+END
+
+9370
+    PRINT
+    PRINT "GREAT UNMITIGATED ZOT!"
+    PRINT
+    PRINT "YOU JUST FOUND ***THE ORB OF ZOT***!"
+    PRINT
+    PRINT "THE RUNESTAFF HAS DISAPPEARED!"
+    RF = 0
+    OF = 1
+    O(1) = 0
+GOTO 5230
+   
+
+9590 X = Rand(8)
+     Y = Rand(8)
+     IF L(CoOrdinates(X, Y, Z)) <> 101 GOTO 9590
+     L(CoOrdinates(X, Y, Z)) = Q
+     RETURN
+9630 PRINT
+     PRINT "YOU GET ALL HIS WARES :"
+     PRINT "PLATE ARMOR"
+     AV = 3: AH = 21
+     PRINT "A SWORD"
+     WV = 3
+     PRINT "A STRENGTH POTION"
+     ST = FNC(ST + Rand(6))
+     PRINT "AN INTELLIGENCE POTION"
+     IQ = FNC(IQ + Rand(6))
+     PRINT "A DEXTERITY POTION"
+     DX = FNC(DX + Rand(6))
+     IF LF = 0 THEN PRINT "A LAMP": LF = 1
+     GOTO 7860
+9770 FOR Q = 1 TO 64
+     PRINT "*";
+     NEXT Q
+     PRINT
+     PRINT
+     RETURN
+9830 PRINT
+     PRINT "YOUR CHOICE";
+9850 INPUT O$
+     O$ = LEFT$(O$, 1)
+     RETURN
+9880 PRINT "HOW MANY POINTS DO YOU WISH TO ADD TO YOUR "; Z$;
+     INPUT O$
+     PRINT
+     Q = VAL(O$)
+     IF Q = 0 AND ASC(O$) <> 48 THEN Q = -1
+     IF Q < 0 OR Q > OT OR Q <> INT(Q) THEN PRINT "** "; : GOTO 9880
+     OT = OT - Q
+RETURN
+
+     INPUT O$
+     Q = INT(VAL(O$))
+RETURN
+9990 PRINT
+      PRINT Z$;
+      INPUT O$
+      Q = INT(VAL(O$))
+      IF Q > 0 AND Q < 9 THEN RETURN
+      PRINT
+      PRINT "** TRY A NUMBER FROM 1 TO 8."
+      GOTO 9990
+10070 PRINT
+      PRINT "DO YOU WANT TO BUY A POTION OF "; Z$; " FOR 1000 GP'S";
+      GOTO 9850
+10100 PRINT
+      PRINT "YOUR "; Z$; " IS NOW"; Q; "."
+      RETURN
+10130 PRINT
+      PRINT "THESE ARE THE TYPES OF "; Z$; " YOU CAN BUY :"
+RETURN
+
+10160
+    PRINT "YOU ARE AT ("; X; ","; Y; ") LEVEL"; Z; "."
+RETURN
+
+DATA AN EMPTY ROOM,.,THE ENTRANCE,E,STAIRS GOING UP,U
+DATA STAIRS GOING DOWN,D,A POOL,P,A CHEST,C,GOLD PIECES,G
+DATA FLARES,F,A WARP,W,A SINKHOLE,S,A CRYSTAL ORB,O
+DATA A BOOK,B,A KOBOLD,M,AN ORC,M,A WOLF,M,A GOBLIN,M,AN OGRE,M
+DATA A TROLL,M,A BEAR,M,A MINOTAUR,M,A GARGOYLE,M,A CHIMERA,M
+DATA A BALROG,M,A DRAGON,M,A VENDOR,V,THE RUBY RED,T
+DATA THE NORN STONE,T,THE PALE PEARL,T,THE OPAL EYE,T
+DATA THE GREEN GEM,T,THE BLUE FLAME,T,THE PALANTIR,T,THE SILMARIL,T
+DATA X,"?",NO WEAPON," SANDWICH"
+DATA DAGGER," STEW",MACE," SOUP",SWORD," BURGER",NO ARMOR," ROAST"
+DATA LEATHER," FILET",CHAINMAIL," TACO",PLATE," PIE"
+DATA HOBBIT,ELF,MAN,DWARF
+
+SUB Info.W1
+     PRINT STRING$(64, "*")
+     PRINT TAB(16); "* * * THE WIZARD'S CASTLE * * *"
+     PRINT STRING$(64, "*")
+     PRINT "MANY CYCLES AGO, IN THE KINGDOM OF N'DIC, THE GNOMIC"
+     PRINT "WIZARD ZOT FORGED HIS GREAT *ORB OF POWER*. HE SOON"
+     PRINT "VANISHED, LEAVING BEHIND HIS VAST SUBTERRANEAN CASTLE"
+     PRINT "FILLED WITH ESURIENT MONSTERS, FABULOUS TREASURES, AND"
+     PRINT "THE INCREDIBLE *ORB OF ZOT*. FROM THAT TIME HENCE, MANY"
+     PRINT "A BOLD YOUTH HAS VENTURED INTO THE WIZARD'S CASTLE. AS"
+     PRINT "OF NOW, *NONE* HAS EVER EMERGED VICTORIOUSLY! BEWARE!!"
+     PRINT
+END SUB
+

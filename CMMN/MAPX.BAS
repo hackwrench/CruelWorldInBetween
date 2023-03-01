@@ -1,0 +1,14 @@
+DEFINT A-Z
+
+DECLARE FUNCTION Mapx8% (n%)
+DECLARE FUNCTION Mapx16% (n%)
+
+REM $DYNAMIC
+FUNCTION Mapx16 (n)
+    Mapx16 = (n) * 16
+END FUNCTION
+
+FUNCTION Mapx8 (n)
+    Mapx8 = (n) * 8
+END FUNCTION
+
